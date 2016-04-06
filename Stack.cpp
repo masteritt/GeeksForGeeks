@@ -6,6 +6,7 @@ using namespace std;
 class stackArray{
 	int a[MAX]; 
 	int tos;
+public:
 	stackArray(){ tos = 0; }
 	bool isEmpty(){ return (tos == 0) ? true : false; }
 	bool isFull(){ return (tos == MAX) ? true : false; }
