@@ -1,0 +1,65 @@
+#include <iostream>
+using namespace std;
+#define MAX 10
+#define MAX_EDGES   ((MAX *(MAX-1))/2)
+
+int N,E;
+class Edges{
+public:
+	int src;
+	int dst;
+};
+Edges edges[MAX_EDGES];
+class Subset{
+public:
+	int parent;
+	int rank;
+};
+
+int find(int i, Subset subset[]){
+	if (subset[i].parent != i)
+		subset[i].parent = find(subset[i].parent, subset);
+	return subset[i].parent;
+}
+void unionSet(int x, int y,Subset subset[]){
+	int xroot = find(x, subset);
+	int yroot = find(y, subset);
+	if (subset[xroot].rank > subset[yroot].rank)
+		subset[yroot].parent = xroot;
+	else if (subset[xroot].rank < subset[yroot].rank)
+		subset[xroot].parent = yroot;
+	else
+	{
+		subset[yroot].parent = xroot;
+		subset[xroot].rank++;
+	}
+}
+bool isCyclic(int u){
+	Subset subset[MAX];
+	for (int i = 0; i < N; i++){
+		subset[i].parent = i;
+		subset[i].rank = 0;
+	}
+	for (int i = 0; i < E; i++)
+	{
+		int xset = find(edges[i].src, subset);
+		int yset = find(edges[i].dst, subset);
+		if (xset != yset){
+			unionSet(xset, yset, subset);
+		}
+		else
+			return true;
+	}
+	return false;
+}
+int main(){								
+	cin >> N >> E;							
+	for (int i = 0; i < E; i++){		
+		cin >> edges[i].src >> edges[i].dst;
+	}
+	if (isCyclic(0))
+		cout << "CYCLE" << endl;
+	else
+		cout << "NO CYCLE" << endl;
+	return 0;
+}
