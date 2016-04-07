@@ -1,0 +1,86 @@
+#include <iostream>
+using namespace std;
+#define MAX 10
+int a[MAX][MAX];
+int color[MAX];
+int N;
+
+class Queue{
+private:
+	int item[MAX];
+	int rear;
+	int front;
+public:
+	Queue(){
+		rear = -1;
+		front = -1;
+	}
+	bool isFull(){
+		if (rear + 1 == MAX)
+			return true;
+		else
+			return false;
+	}
+	bool isEmpty() {
+		if ((front == -1) || (front>rear))
+			return true;
+		else
+			return false;
+	}
+	bool push(int x){
+		if (!isFull()){
+			item[++rear] = x;
+			if (front == -1)
+				front = 0;
+			return true;
+		}
+		return false;
+	}
+	bool pop(int &x){
+		if (!isEmpty())
+		{
+			x = item[front++];
+			return true;
+		}
+		else
+			return false;
+	}
+};
+void init(){
+	for (int i = 0; i < N; i++){
+		color[i] = -1;
+		for (int j = 0; j < N; j++)
+			a[i][j] = 0;
+	}
+}
+bool isBipartite(int src, Queue &queue){
+	color[src] = 0;
+	queue.push(src);
+	while (!queue.isEmpty())
+	{
+		int u;
+		queue.pop(u);
+		for (int v = 0; v < N; v++){
+			if (a[u][v] && (color[v] == -1))
+			{
+				color[v] = 1 - color[u];
+				queue.push(v);
+			}
+			else if (a[u][v] && (color[v] == color[u]))
+				return false;
+		}
+	}
+	return true;
+}
+int main(){
+	cin >> N;
+	init();
+	for (int i = 0; i < N; i++){
+		for (int j = 0; j < N; j++)
+			cin >> a[i][j];
+	}
+	Queue queue;
+	isBipartite(0, queue) ? cout << "YES" :
+							cout << "NO";
+	return 0;
+}
