@@ -1,0 +1,37 @@
+//Longest ZigZag Sequence
+#include <iostream>
+using namespace std;
+
+#define MAX 10
+int a[MAX];
+int Z[2][MAX];
+int N;
+
+int max(int a, int b){
+	return a > b ? a : b;
+}
+int main(){
+	freopen("input.txt", "r", stdin);
+	cin >> N;
+	for (int i = 0; i < N; i++)
+	{
+		cin >> a[i];
+		Z[0][i] = 1;
+		Z[1][i] = 1;
+	}
+	int res = 1;
+	for (int i = 1; i < N; i++)
+	{
+		for (int j = 0; j < i; j++)
+		{
+			if ((a[i] > a[j]) && (Z[0][i] < (Z[1][j] + 1)))
+				Z[0][i] = Z[1][j] + 1;
+			if ((a[i] < a[j]) && (Z[1][i] < (Z[0][j] + 1)))
+				Z[1][i] = Z[0][j] + 1;
+		}
+		if (res < max(Z[0][i], Z[1][i]))
+			res = max(Z[0][i], Z[1][i]);
+	}
+	cout << res << endl;
+	return 0;
+}
