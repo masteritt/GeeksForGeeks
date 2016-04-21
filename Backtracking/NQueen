@@ -1,0 +1,62 @@
+#include<iostream>
+using namespace std;
+#define Max 8
+int N;
+int sol[Max][Max]; 
+
+void printSolution(){
+	for (int i = 0; i < N; i++)
+	{
+		for (int j = 0; j < N; j++)
+			printf("%3d ", sol[i][j]);
+		cout << endl;
+	}
+}
+bool isSafe(int row, int col){
+	if ((row >= 0) && (col >= 0) && (row < N) && (col < N))
+	{
+		for (int j = 0; j < col; j++)
+			if (sol[row][j])
+				return false;
+		for (int i = row, j = col; i >= 0 && j >= 0; i--, j--)
+			if (sol[i][j])
+				return false;
+		for (int i = row, j = col; i < N && j >= 0; i++, j--)
+			if (sol[i][j])
+				return false;
+		return true;
+	}
+	return false;
+}
+bool solveNQueenUtils(int col){
+	if (col == N)
+		return true;
+	for (int x = 0; x < N; x++)
+	{ 
+		if (isSafe(x, col)){
+			sol[x][col] = 1;
+			if (solveNQueenUtils(col + 1)){
+				return true;
+			}
+			sol[x][col] = 0;
+		}
+	}
+	return false;
+}
+void solveNQueen(){
+	for (int i = 0; i < N; i++)
+		for (int j = 0; j < N; j++)
+			sol[i][j] = 0;
+
+	if (solveNQueenUtils(0)){
+		printSolution();
+	}
+	else
+		cout << "No Solution" << endl;
+}
+
+int main(){
+	cin >> N;
+	solveNQueen();
+	return 0;
+}
