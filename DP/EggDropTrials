@@ -1,0 +1,42 @@
+#include <iostream>
+using namespace std;
+#define Max 101
+#define INF 0x7fffffff
+
+int floors, eggs;
+int dp[Max][Max];
+
+int max(int a, int b){
+	return (a > b) ? a : b;
+}
+int eggDrop(){
+	for (int i = 1; i <= eggs; i++)
+	{
+		dp[i][0] = 0;
+		dp[i][1] = 1;
+	}
+	for (int j = 1; j <= floors; j++)
+		dp[1][j] = j;
+
+	for (int i = 2; i <= eggs; i++)
+		for (int j = 2; j <= floors; j++)
+		{
+			dp[i][j] = INF;
+			for (int x = 1; x <= j; x++)
+			{
+				int res = 1 + max(dp[i - 1][x - 1], dp[i][j - x]);
+				if (res < dp[i][j])
+					dp[i][j] = res;
+			}
+		}
+	return dp[eggs][floors];
+}
+int main(){
+	freopen("input.txt", "r", stdin);
+	cin >> floors >> eggs;
+	cout << eggDrop() << endl;
+	return 0;
+}
+//   1 2 3 4 5 6
+// 1 1 2 3 4 5 6
+// 2 1 2 2 3 3 3
