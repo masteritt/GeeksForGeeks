@@ -1,0 +1,36 @@
+#include <iostream>
+using namespace std;
+#define Max 101
+int L, N, length[Max], value[Max];
+int dp[Max][Max];
+
+int max(int a, int b){
+	return ((a > b) ? a : b);
+}
+int cutRod(){
+	for (int i = 0; i <= N; i++)
+		for (int j = 0; j <= L; j++)
+		{
+			if ((i == 0) || (j == 0))
+				dp[i][j] = 0;
+			else if (j >= length[i])// max(upperVal,(currentRow->lengthStepBack + currentVal)
+				dp[i][j] = max(dp[i - 1][j], (value[i] + dp[i][j - length[i]]));
+			else
+				dp[i][j] = dp[i - 1][j]; //upper value without item
+		}
+	return dp[N][L];
+}
+
+int main(){
+	cin >> N;
+	for (int i = 1; i <= N; i++)
+		cin >> length[i] >> value[i];
+	cin >> L;
+	cout << cutRod() << endl;
+	return 0;
+}
+//     0 1 2 3 4  5 
+// 2 1 0 2 4 6 8  10 
+// 5 2 0 2 5 7 10 12
+// 7 3 0 2 5 7 10 12 
+// 8 4 0 2 5 7 10 12
