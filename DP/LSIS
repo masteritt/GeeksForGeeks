@@ -1,0 +1,46 @@
+#include <iostream>
+using namespace std;
+
+#define MAX 10
+int a[MAX];
+int lsis[MAX];
+int N;
+int parent[MAX];
+
+int main(){
+	//freopen("input.txt", "r", stdin);
+	cin >> N;
+	for (int i = 0; i < N; i++)
+	{
+		cin >> a[i];
+		lsis[i] = a[i];
+		parent[i] = -1;
+	}
+	for (int i = 1; i < N; i++)
+		for (int j = 0; j < i; j++)
+			if ((a[i] > a[j]) && (lsis[i] < (lsis[j] + a[i])))
+			{
+				lsis[i] = lsis[j] + a[i];
+				parent[i] = j;
+			}
+
+	int max = 0,maxid;
+	for (int i = 0; i < N; i++)
+		if (lsis[i] > max)
+		{
+			max = lsis[i];
+			maxid = i;
+		}
+	do{
+		cout << a[maxid] << " ";
+		maxid = parent[maxid];
+	} while (parent[maxid] != -1);
+	cout << a[maxid] << endl;
+	cout << max << endl;
+	return 0;
+}
+// 4 6  1 3  8 4 6 
+// 4 10 1 4 18 8 13 
+//-1 0 -1 2  1 3 5   /parent index/
+//8 6 4
+//18 
