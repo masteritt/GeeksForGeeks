@@ -1,0 +1,31 @@
+#include<iostream>
+using namespace std;
+#define Max 10
+char a[Max];
+
+void swapNum(int i, int j){
+	int temp = a[i]; a[i] = a[j]; a[j] = temp;
+}
+void permute(int l, int r){
+	if (l == r){
+		cout << a << endl;
+		return;
+	}
+	for (int i = l; i <= r; i++)
+	{
+		swapNum(l, i);
+		permute(l + 1, r);
+		swapNum(l, i);
+	}
+}
+int main(){
+	int l=0, r;
+	gets(a);
+	int i;
+	for (i = 0; a[i] != '\0'; i++);
+	r = i-1;
+	permute(l, r);
+	return 0;
+}
+//ABC
+//ABC ACB BAC BCA CBA CAB
