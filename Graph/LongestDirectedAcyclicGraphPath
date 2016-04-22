@@ -1,0 +1,90 @@
+#include <iostream>
+using namespace std;
+#define MAX 10
+#define NINF -0x7fffffff
+int mat[MAX][MAX];
+int visited[MAX];
+int dist[MAX];
+int N;
+
+class Stack{
+	int a[MAX];
+	int tos;
+public:
+	Stack(){ tos = 0; }
+	bool isEmpty(){ return (tos == 0) ? true : false; }
+	bool isFull(){ return (tos == MAX) ? true : false; }
+	bool push(int x){
+		if (!isFull()){
+			a[tos++] = x;
+			return true;
+		}
+		return false;
+	}
+	bool pop(int &x){
+		if (!isEmpty()){
+			x = a[--tos];
+			return true;
+		}
+		return false;
+	}
+};
+void init(){
+	for (int i = 0; i < N; i++){
+		visited[i] = false;
+		dist[i] = NINF;
+		for (int j = 0; j < N; j++)
+			mat[i][j] = 0;
+	}
+}
+void topologicalSort(int u, Stack &stack){
+	visited[u] = true;
+	for (int v = 0; v< N; v++){
+		if (mat[u][v] && (!visited[v]))
+			topologicalSort(v, stack);
+	}
+	stack.push(u);
+}
+
+void longestPath(int src){
+	Stack stack;
+	for (int i = 0; i < N; i++)
+		if (!visited[i])
+			topologicalSort(i, stack);
+
+	dist[src] = 0;
+	while (!(stack.isEmpty()))
+	{
+		int u;
+		stack.pop(u);
+		if (dist[u] != NINF)
+			for (int v = 0; v < N; v++){
+				if ((mat[u][v]) && (dist[v] <(dist[u] + mat[u][v])))
+					dist[v] = dist[u] + mat[u][v];
+			}
+	}
+	for (int i = 0; i < N; i++)
+		if (dist[i] == NINF)
+			cout << "INF ";
+		else
+			cout << dist[i] << " ";
+}
+int main(){
+	freopen("input.txt", "r", stdin);
+	cin >> N;
+	init();
+	for (int i = 0; i < N; i++){
+		for (int j = 0; j < N; j++)
+			cin >> mat[i][j];
+	}
+	longestPath(1);
+	return 0;
+}
+//6
+//0 5 3 0 0 0
+//0 0 2 6 0 0
+//0 0 0 7 4 2
+//0 0 0 0 - 1 1
+//0 0 0 0 0 - 2
+//0 0 0 0 0 0
+//INF 0 2 9 8 10
