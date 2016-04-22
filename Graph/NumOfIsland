@@ -1,0 +1,64 @@
+#include <stdio.h>
+#include <iostream>
+
+using namespace std;
+#define Max 26
+int N;
+int data[Max][Max];
+bool visited[Max][Max];
+int dir[2][4] = { { 1, 0, -1, 0 }, { 0, 1, 0, -1 } };
+
+bool isSafe(int i, int j){
+	if ((i >= 1) && (j >= 1) && (i <= N) && (j <= N) && !(visited[i][j]) && data[i][j])
+		return true;
+	return false;
+}
+void dfs(int &num, int i, int j)
+{
+	visited[i][j] = true;
+	num++;
+	for (int k = 0; k < 4; k++){
+		int x = i + dir[0][k];
+		int y = j + dir[1][k];
+		if (isSafe(x, y)){
+			dfs(num, x, y);
+		}
+	}
+}
+int main(int argc, char** argv)
+{
+	int t;
+	int T;
+	freopen("input.txt", "r", stdin);
+
+	cin >> T;
+	for (t = 0; t < T; t++)
+	{
+		int i, j;
+		cin >> N;
+
+		for (i = 1; i <= N; i++) {
+			for (j = 1; j <= N; j++) {
+				cin >> data[i][j];
+			}
+		}
+		for (i = 1; i <= N; i++)
+			for (j = 1; j <= N; j++)
+				visited[i][j] = false;
+		int numIsland = 0;
+		int islandCount = 0;
+		for (i = 1; i <= N; i++)
+			for (j = 1; j <= N; j++)
+				if ((!visited[i][j]) && data[i][j])
+				{
+					int num = 0;
+					dfs(num, i, j);
+					numIsland++;
+					if (num > islandCount)
+						islandCount = num;
+				}
+		cout << "Num of island, size of max island" << endl;
+		cout << numIsland << " " << islandCount << endl;
+	}
+	return 0;
+}
