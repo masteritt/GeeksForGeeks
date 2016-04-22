@@ -1,0 +1,82 @@
+#include<iostream>
+using namespace std;
+#define N 9
+int grid[N][N];
+
+void printSolution(){
+	for (int i = 0; i < N; i++)
+	{
+		for (int j = 0; j < N; j++)
+			cout << grid[i][j] << "  ";
+		cout << endl;
+	}
+}
+bool isColumnSafe(int y, int num){
+	for (int x = 0; x < N; x++)
+		if (grid[x][y] == num)
+			return false;
+	return true;
+}
+bool isRowSafe(int x, int num){
+	for (int y = 0; y < N; y++)
+		if (grid[x][y] == num)
+			return false;
+	return true;
+}
+bool isBoxSafe(int xstart, int ystart, int num){
+	for (int x = 0; x < 3; x++)
+		for (int y = 0; y < 3; y++)
+			if (grid[xstart + x][ystart+y] == num)
+				return false;
+	return true;
+}
+bool isSafe(int x, int y,int num){
+	if ((isColumnSafe(y, num)) && (isRowSafe(x,num)) && (isBoxSafe(x-x%3, y-y%3, num)))
+		return true;
+	return false;
+}
+
+bool findUnassignedLoc(int &x,int &y){
+	for (int i = 0; i < N; i++)
+		for (int j = 0; j < N; j++)
+			if (grid[i][j] == 0){
+				x = i;
+				y = j;
+				return true;
+			}
+	return false;
+}
+bool solveSudoku(){
+	int x, y;
+	if (!findUnassignedLoc(x, y))
+		return true;
+	for (int num = 1; num <= N; num++)
+		if (isSafe(x, y,num)){
+			grid[x][y] = num;
+			if (solveSudoku())
+				return true;
+			grid[x][y] = 0;
+		}
+	return false;
+}
+
+int main(){
+	freopen("input.txt", "r", stdin);
+	for (int i = 0; i < N; i++)
+		for (int j = 0; j < N; j++)
+			cin >> grid[i][j];
+	if (solveSudoku())
+		printSolution();
+	else
+		cout << "No Solution" << endl;
+	return 0;
+}
+//3  0  6  5  0  8  4  0  0
+//5  2  0  0  0  0  0  0  0
+//0  8  7  0  0  0  0  3  1
+//0  0  3  0  1  0  0  8  0
+//9  0  0  8  6  3  0  0  5
+//0  5  0  0  9  0  6  0  0
+//1  3  0  0  0  0  2  5  0
+//0  0  0  0  0  0  0  7  4
+//0  0  5  2  0  6  3  0  0
