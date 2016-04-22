@@ -1,0 +1,70 @@
+//Kosaraju’s Algorithm to check strongly connected directed graph
+#include<iostream>
+using namespace std;
+#define Max 11
+int grid[Max][Max];
+int transpose[Max][Max];
+bool visited[Max];
+int N;
+
+void DFS(int a[Max][Max], int x){
+	visited[x] = true;
+	for (int y = 0; y < N; y++)
+		if ((a[x][y]) && (!visited[y]))
+			DFS(a,y);
+}
+void resetVisited(){
+	for (int i = 0; i < N; i++)
+		visited[i]= false;
+}
+bool checkIfAllConnected(){
+	for (int i = 0; i < N; i++)
+		if (!visited[i])
+			return false;
+	return true;
+}
+
+bool isStronglyConnected(){
+	DFS(grid, 0);
+	if (!checkIfAllConnected())
+		return false;
+
+	resetVisited();
+	//check with Transposed Matrix from same vertex 0
+	DFS(transpose, 0);
+	if (!checkIfAllConnected())
+		return false;
+
+	return true;
+}
+int main(){
+	freopen("input.txt", "r", stdin);
+	cin >> N;
+	for (int i = 0; i < N; i++)
+	{
+		for (int j = 0; j < N; j++)
+		{
+			cin >> grid[i][j];
+			transpose[j][i] = grid[i][j];
+		}
+		visited[i] = false;
+	}
+
+	if (isStronglyConnected())
+		cout << "Directed graph is strongly connected" << endl;
+	else
+		cout << "Directed graph is NOT strongly connected" << endl;
+
+	return 0;
+}
+//5
+//0 1 0 0 0
+//0 0 1 0 0
+//0 0 0 1 1
+//1 0 0 0 0
+//0 0 1 0 0 // yes
+//4
+//0 1 0 0
+//0 0 1 0
+//0 0 0 1
+//0 0 0 0  //NO
