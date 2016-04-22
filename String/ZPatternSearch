@@ -1,0 +1,63 @@
+#include<iostream>
+using namespace std;
+#define Max 50
+char pattern[Max];
+char str[Max];
+int pL, sL,n;
+char con[Max + Max];
+int Z[Max + Max];
+
+void getZarr(){
+	int L=0, R=0;
+	for (int i = 1; i < n; i++){
+		if (i > R){              // R-L=0 in starting, ababab i=1,R=0; aaaaaa i=1;R=5;
+			L = R = i;          
+			while ((R < n) && (con[R - L] == con[R]))
+				R++;		
+			Z[i] = R - L;
+			R--;
+		}
+		else{                      // ababab i=3,R=5,L=2
+			int k = i - L;         
+			if (Z[k] < (R - i + 1))
+				Z[i] = Z[k];
+			else{                 // aaaaaa i=2,R=5,L=0
+				L = i;
+				while ((R < n) && (con[R - L] == con[R]))
+					R++;
+				Z[i] = R - L;
+				R--;
+			}
+		}
+	}
+}
+void search(){
+	getZarr();
+	for (int i = 0; i < n; i++)
+		if (Z[i] == pL)
+			cout << "Pattern found at : " << i - pL - 1 << endl;
+}
+int main(){
+	freopen("input.txt", "r", stdin);
+	cin >> pL >> sL;
+	for (int i = 0; i < pL; i++)
+	{
+		cin >> pattern[i];
+		con[i] = pattern[i];
+	}
+	con[pL] = '$';
+	pattern[pL] = '\0';
+	for (int i = 0; i < sL; i++)
+	{
+		cin >> str[i];
+		con[pL + 1 + i] = str[i];
+	}
+	con[pL + sL + 1] = '\0';
+	str[sL] = '\0';
+	n = pL + sL + 1;
+	search();
+	return 0;
+}
+// 0 1 2 3 4 5 6 7 8 9 10 11 12 13
+// a b c $ x a b c a b g  a  b  c
+// 0 0 0 0 0 3 0 0 2 0 0  3  0  0
