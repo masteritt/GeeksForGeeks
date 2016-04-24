@@ -1,0 +1,56 @@
+#include <iostream>
+using namespace std;
+#define Max 21
+#define INF 0x7fffffff
+int N;
+char a[Max];
+int C[Max];
+bool dp[Max][Max];
+
+int palindromePartition() {
+	for (int i = 0; i < N; i++)
+		dp[i][i] = true;
+	for (int L = 2; L <= N; L++)
+	{
+		for (int i = 0 ; i < N - L + 1; i++)
+		{
+			int j = i + L - 1;
+			if (L == 2)
+				dp[i][j] = (a[i] == a[j]);
+			else
+				dp[i][j] = ((a[i] == a[j]) && dp[i + 1][j - 1]);
+		}
+	}
+	for (int i = 0; i < N; i++) {
+		if (dp[0][i])
+			C[i] = 0;
+		else
+		{
+			C[i] = INF;
+			for (int j = 0; j < i; j++) {
+				if (dp[j + 1][i] && (C[i] > C[j] + 1))
+					C[i] = C[j] + 1;
+			}
+		}
+	}
+	return C[N - 1];
+}
+int main() {
+	//freopen("input.txt","r",stdin);
+	cin >> N ;
+	for (int i = 0; i < N; i++)
+		cin >> a[i];
+	cout << palindromePartition() << endl;
+	return 0;
+}
+//5
+//dp
+//abcbm
+//10000
+//01010
+//00100
+//00010
+//00001
+//C
+//01212  //2
+ 
