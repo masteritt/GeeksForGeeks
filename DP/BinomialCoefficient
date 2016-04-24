@@ -1,0 +1,36 @@
+#include <iostream>
+using namespace std;
+#define Max 11
+#define INF 0x7fffffff
+int N,K;
+
+int dp[Max][Max];
+int min(int a, int b) {
+	return (a < b) ? a : b;
+}
+
+int binomialCoefficient() {
+	for(int i=0;i<=N;i++)
+		for (int j = 0; j <= min(i, K); j++) {
+			if ((j == 0) || (i == j))
+				dp[i][j] = 1;
+			else
+				dp[i][j] = dp[i - 1][j - 1] + dp[i - 1][j];
+		}
+	return dp[N][K];
+}
+int main() {
+	//freopen("input.txt","r",stdin);
+	cin >> N >> K;
+	cout << binomialCoefficient() << endl;
+	return 0;
+}
+//5 2
+//1 0 0 
+//1 1 0 
+//1 2 1 
+//1 3 3 
+//1 4 6 
+//1 5 10 // 10
+
+ 
