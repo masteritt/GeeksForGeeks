@@ -1,0 +1,47 @@
+//Longest Palindromic subsequnce
+#include <iostream>
+using namespace std;
+#define Max 21
+#define INF 0x7fffffff
+int N;
+char a[Max];
+
+int dp[Max][Max];
+int max(int a, int b) {
+	return (a > b) ? a : b;
+}
+int lps() {
+	for (int i = 0; i < N; i++)
+		dp[i][i] = 1;
+	for (int L = 2; L <= N; L++) {
+		for (int i = 0; i < N - L + 1; i++) {
+			int j = i + L - 1;
+			if ((a[i] == a[j]) && (L == 2))
+				dp[i][j] = 2;
+			else if (a[i] == a[j])
+				dp[i][j] = dp[i + 1][j - 1] + 2;
+			else
+				dp[i][j] = max(dp[i][j - 1], dp[i + 1][j]);
+		}
+	}
+	return dp[0][N - 1];
+}
+int main() {
+	freopen("input.txt","r",stdin);
+	cin >> N ;
+	for (int i = 0; i < N; i++)
+	{
+		cin >> a[i];
+	}
+	cout << lps() << endl;
+	return 0;
+}
+//7
+//adbecba
+//1111135  //5
+//0111133
+//0011133
+//0001111
+//0000111
+//0000011
+//0000001
