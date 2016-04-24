@@ -1,0 +1,44 @@
+#include<iostream>
+using namespace std;
+
+#define Max 11
+#define INF 0x7fffffff
+int a[Max];
+int N;
+int jumps[Max];
+
+
+int min(int x, int y)
+{
+	return (x < y) ? x : y;
+}
+
+int minimumJumps()
+{
+	if ((N == 0) || (a[0] == 0))
+		return INF;
+	jumps[0] = 0;
+	for (int i = 1; i < N; i++) {
+		jumps[i] = INF;
+		for (int j = 0; j < i; j++) {
+			if ((i <= j + a[j]) && jumps[j] != INF) {
+				jumps[i] = min(jumps[j] + 1, jumps[i]);
+				break;
+			}
+		}
+	}
+	return jumps[N - 1];
+}
+int main()
+{
+	cin >> N;
+	for (int i = 0; i < N; i++)
+		cin >> a[i];
+	cout << minimumJumps() << endl;
+	return 0;
+}
+//10
+//2 3 1 1 2 4 2 0 1 1
+
+//0 1 1 2 2 3 3 4 4 4
+//4
