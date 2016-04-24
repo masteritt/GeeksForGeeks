@@ -1,0 +1,39 @@
+#include <iostream>
+using namespace std;
+#define Max 21
+#define INF 0x7fffffff
+int N;
+int a[Max];
+int b[Max];
+
+int dp[Max];
+
+int maxLengthOfPairs() {
+	for (int i = 0; i < N; i++)
+		dp[i] = 1;
+	for(int i=1;i<N;i++)
+		for (int j = 0; j < i; j++) {
+			if ((a[i] > b[j]) && (dp[i] < dp[j] + 1)) //start of second element >end of first element
+				dp[i] = dp[j] + 1;
+		}
+	int max = 0;
+	for (int i = 0; i < N; i++) {
+		if (dp[i] > max)
+			max = dp[i];
+	}
+	return max;
+}
+int main() {
+	//freopen("input.txt","r",stdin);
+	cin >> N ;
+	for (int i = 0; i < N; i++)
+		cin >> a[i] >> b[i];  //sorted in order of first element
+	cout << maxLengthOfPairs() << endl;
+	return 0;
+}
+//4
+//5 24
+//15 25
+//27 40
+//50 60
+//1 1 2 3   // 3
