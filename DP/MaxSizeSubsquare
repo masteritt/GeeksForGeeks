@@ -1,0 +1,49 @@
+#include <iostream>
+using namespace std;
+#define Max 21
+#define INF 0x7fffffff
+int N;
+int a[Max][Max];
+
+int dp[Max][Max];
+
+int min(int a, int b) {
+	return (a < b) ? a : b;
+}
+int min(int a, int b, int c) {
+	return min(a, min(b, c));
+}
+int maxSubSquareMatrix() {
+	for (int j = 0; j < N; j++)
+		dp[0][j] = a[0][j];
+	for (int i = 0; i < N; i++)
+		dp[i][0] = a[i][0];
+	int res = 0;
+	for (int i = 1; i < N; i++)
+		for (int j = 1; j < N; j++)
+		{
+			if (a[i][j]) {
+				dp[i][j] = min(dp[i - 1][j], dp[i][j - 1], dp[i - 1][j - 1]) + 1;
+				if (dp[i][j] > res)
+					res = dp[i][j];
+			}else{
+				dp[i][j] = 0;
+			}
+		}
+	return res;
+}
+int main() {
+	freopen("input.txt","r",stdin);
+	cin >> N ;
+	for (int i = 0; i < N; i++)
+		for (int j = 0; j < N; j++)
+			cin >> a[i][j];
+	cout << maxSubSquareMatrix() << endl;
+	return 0;
+}
+//5
+//0 1 1 0 1      0 1 1 0 1
+//1 1 0 1 0      1 1 0 1 0
+//0 1 1 1 0      0 1 1 1 0
+//1 1 1 1 0      1 1 2 2 0
+//1 1 1 1 1      1 2 2 3 1  // 3
