@@ -1,0 +1,42 @@
+#include <iostream>
+using namespace std;
+#define Max 15
+#define INF 0x7fffffff
+int N;
+int mat[Max];
+int dp[Max][Max];
+
+int matrixChainOrder()
+{
+	for (int i = 0; i < N; i++)
+		dp[i][i] = 0;
+	for (int L = 2; L<N; L++)
+	{
+		for (int i = 1; i <= N - L + 1; i++)
+		{
+			int j = i + L - 1;
+			dp[i][j] = INF;
+			for (int k = i; k<j; k++) {
+				int res = dp[i][k] + dp[k + 1][j] + mat[i - 1] * mat[k] * mat[j];
+				if (res < dp[i][j])
+					dp[i][j] = res;
+			}
+		}
+	}
+	return dp[1][N - 1];
+}
+int main(int argc, char** argv) {
+	//freopen("input.txt","r",stdin);
+	cin >> N;
+	for (int i = 0; i<N; i++)
+		cin >> mat[i];
+
+	cout << matrixChainOrder() << endl;
+	return 0;
+}
+//4
+//10 30  5   60
+// 0  0  0    0
+// 0  0 1500 4500
+// 0  0  0   9000
+// 0  0  0    0
