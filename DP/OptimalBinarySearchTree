@@ -1,0 +1,52 @@
+#include<iostream>
+using namespace std;
+
+#define Max 11
+#define INF 0x7fffffff
+int key[Max];
+int freq[Max];
+int N;
+int cost[Max][Max];
+
+
+int min(int x, int y)
+{
+	return (x < y) ? x : y;
+}
+int sumOfFreqInRange(int i, int j) {
+	int sum = 0;
+	for (int x = i; x <= j; x++)
+		sum += freq[x];
+	return sum;
+}
+int optimalBinarySearchTree()
+{
+	for (int i = 0; i < N; i++)
+		cost[i][i] = freq[i];
+	for(int L=2;L<=N;L++)
+		for (int i = 0; i <= N - L + 1; i++) {
+			int j = i + L - 1;
+			cost[i][j] = INF;
+			for (int r = i; r <= j; r++) {
+				int res = ((r > i) ? cost[i][r - 1] : 0) +
+					((r < j) ? cost[r + 1][j] : 0) +
+					sumOfFreqInRange(i, j);
+				if (res < cost[i][j])
+					cost[i][j] = res;
+			}
+		}
+	return cost[0][N - 1];
+}
+int main()
+{
+	cin >> N;
+	for (int i = 0; i < N; i++)
+		cin >> key[i] >> freq[i];
+	cout << optimalBinarySearchTree() << endl;
+	return 0;
+}
+//3
+//10 34   12 8    20 50 
+//34  50  142  // 142
+// 0   8  66
+// 0   0  50
