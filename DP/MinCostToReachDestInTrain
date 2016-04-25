@@ -1,0 +1,40 @@
+#include<iostream>
+using namespace std;
+
+#define INF 0x7fffffff
+#define Max 11
+int N;
+int cost[Max][Max];
+
+// cost to reach station N-1 from station 0.
+int minCost()
+{
+	// dist[i] stores minimum cost to reach station i from station 0.
+	int dist[Max];
+	for (int i = 0; i<N; i++)
+		dist[i] = INF;
+	dist[0] = 0;
+
+	for (int i = 0; i<N; i++)
+		for (int j = i + 1; j<N; j++)
+			if (dist[j] > dist[i] + cost[i][j])
+				dist[j] = dist[i] + cost[i][j];
+
+	return dist[N - 1];
+}
+int main()
+{
+	cin >> N;
+	for (int i = 0; i < N; i++)
+		for (int j = 0; j < N; j++)
+			cin >> cost[i][j];
+	cout << "The Minimum cost to reach station "
+		<< N << " is " << minCost();
+	return 0;
+}
+//4
+// 0    15    80    90 
+// 9999 0     40    50
+// 9999 9999  0     70
+// 9999 9999  9999  0 
+//65
