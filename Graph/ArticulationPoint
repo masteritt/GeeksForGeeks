@@ -29,9 +29,11 @@ void APUtil(int u){
 				APUtil(v);
 				low[u] = min(low[u], low[v]);
 
+				// (1) u is root of DFS tree and has two or more chilren.
 				if ((parent[u] == -1) && (children > 1))
 					ap[u] = true;
-				if ((parent[u] != -1) && low[v] >= disc[u])
+      				// (2) If u is not root and low value of one of its child is more than discovery value of u.
+      				if ((parent[u] != -1) && low[v] >= disc[u])
 					ap[u] = true;
 			}
 			else if (v!=parent[u]){
