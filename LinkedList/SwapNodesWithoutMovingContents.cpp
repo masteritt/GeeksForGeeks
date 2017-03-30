@@ -17,18 +17,19 @@ public:
     void push(int next);
     void printList();
     void swapNodes(int x, int y);
-    LL(){
-        head_ref = NULL; }
-    ~LL(){
-        while (head_ref != NULL)
-        {
-            Node * node = head_ref;
-            head_ref = head_ref->next;
-            delete node;
-        }
-    }
+    LL() { head_ref = NULL; }
+    ~LL();
 };
 
+LL::~LL()
+{
+    while (head_ref != NULL)
+    {
+        Node * node = head_ref;
+        head_ref = head_ref->next;
+        delete node;
+    }
+}
 void LL::push(int new_data)
 {
     Node* new_node = new Node();
