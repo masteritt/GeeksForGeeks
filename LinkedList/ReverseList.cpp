@@ -57,7 +57,7 @@ void LL::reverse()
     {
         next = current->next;
 
-        // N = P, P = C, C = N
+        // PCN =>  N = P, P = C, C = N
         current->next = prev;
         prev = current;
         current = next;
