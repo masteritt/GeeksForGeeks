@@ -1,6 +1,4 @@
-/* swaps the nodes of linked list without moving data fields.*/
-
-#include<iostream>
+include<iostream>
 using namespace std;
 
 class Node
